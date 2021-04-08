@@ -23,7 +23,7 @@ look for the flag on the Configuration panel on the instance's Overview page:
 
 If it isn't enabled, you can add this flag using the "Edit configuration" dialog
 at the bottom of the Configuration panel. Note, changing this setting may
-require the database instance reboot.
+require a database instance reboot.
 
 ## Create Service Account for Database
 
@@ -61,7 +61,7 @@ in Google Cloud documentation for more info.
 
 The final part of GCP configuration is to create another service account with
 "Service Account Token Creator" permission, or modify an existing one to add it.
-This will let Teleport Database Service to generate an IAM auth token when
+This will let Teleport Database Service generate an IAM auth token when
 connecting to the database as a service account user we created above.
 
 If creating a new one, go to the [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
@@ -69,7 +69,7 @@ page and create another service account:
 
 ![Create Service Account](../../../img/database-access/guides/cloudsql/service-account-db-service.png)
 
-Asign it the "Service Account Token Creator" role:
+Assign it the "Service Account Token Creator" role:
 
 ![Grant Service Account Token Creator to Service Account](../../../img/database-access/guides/cloudsql/service-account-db-service-grant.png)
 
@@ -140,7 +140,7 @@ proxy_service:
   enabled: "yes"
   # Set public address proxy will be reachable at.
   public_addr: teleport.example.com:3080
-  # PostgreSQL proxy is listening on a regular web proxy port.
+  # The PostgreSQL proxy listens on the regular web proxy port.
   web_listen_addr: 0.0.0.0:3080
 ssh_service:
   enabled: "no"
@@ -165,7 +165,7 @@ $ tctl tokens add \
 
 ### Create Role and User
 
-Create the role that will allow a user to connect to any database using any
+Create a role that will allow a user to connect to any database using any
 database account:
 
 ```sh
@@ -185,7 +185,7 @@ spec:
 EOF
 ```
 
-Create the user assigned the `db` role we've just created:
+Create a user and assign them the `db` role we've just created:
 
 ```sh
 $ tctl --config=/path/to/teleport.yaml users add --roles=admin,db testuser
