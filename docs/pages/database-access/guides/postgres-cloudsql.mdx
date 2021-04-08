@@ -188,7 +188,7 @@ EOF
 Create the user assigned the `db` role we've just created:
 
 ```sh
-$ tctl --config=/path/to/teleport.yaml users add --roles=admin,db testuser
+$ tctl --config=/path/to/teleport.yaml users add --roles=editor,access,db testuser
 ```
 
 ### Start Database Service with Config File
@@ -316,14 +316,14 @@ When logging into a PostgreSQL database, `tsh` automatically configures a sectio
 in the [connection service file](https://www.postgresql.org/docs/current/libpq-pgservice.html)
 with the name of `<cluster-name>-<database-service-name>`.
 
-Suppose the cluster name is "root", then you can connect to the database using
-the following `psql` command:
+Suppose the cluster name is "teleport.example.com", then you can connect to the
+database using the following `psql` command:
 
 ```sh
 # Use default database user and database name.
-$ psql "service=root-cloudsql"
+$ psql "service=teleport.example.com-cloudsql"
 # Specify database user and database name explicitly.
-$ psql "service=root-cloudsql user=teleport@<project-id>.iam dbname=metrics"
+$ psql "service=teleport.example.com-cloudsql user=teleport@<project-id>.iam dbname=metrics"
 ```
 
 To log out of the database and remove credentials:
