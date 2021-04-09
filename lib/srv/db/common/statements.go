@@ -66,8 +66,8 @@ type Portal struct {
 }
 
 // NewStatementsCache returns a new instance of prepared statements cache.
-func NewStatementsCache() StatementsCache {
-	return StatementsCache{cache: make(map[string]Statement)}
+func NewStatementsCache() *StatementsCache {
+	return &StatementsCache{cache: make(map[string]Statement)}
 }
 
 // Save adds the provided prepared statement information to the cache.

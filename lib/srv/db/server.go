@@ -58,7 +58,7 @@ type Config struct {
 	// StreamEmitter is a non-blocking audit events emitter.
 	StreamEmitter events.StreamEmitter
 	// NewAudit allows to override audit logger in tests.
-	NewAudit common.NewAuditFn
+	NewAudit NewAuditFn
 	// TLSConfig is the *tls.Config for this server.
 	TLSConfig *tls.Config
 	// Authorizer is used to authorize requests coming from proxy.
@@ -74,6 +74,9 @@ type Config struct {
 	// OnHeartbeat is called after every heartbeat. Used to update process state.
 	OnHeartbeat func(error)
 }
+
+// NewAuditFn defines a function that creates an audit logger.
+type NewAuditFn func(common.AuditConfig) (common.Audit, error)
 
 // CheckAndSetDefaults makes sure the configuration has the minimum required
 // to function.

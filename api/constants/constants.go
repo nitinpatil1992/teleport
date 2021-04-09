@@ -94,6 +94,8 @@ const (
 
 	// UseOfClosedNetworkConnection is a special string some parts of
 	// go standard lib are using that is the only way to identify some errors
+	//
+	// TODO(r0mant): See if we can use net.ErrClosed and errors.Is() instead.
 	UseOfClosedNetworkConnection = "use of closed network connection"
 )
 

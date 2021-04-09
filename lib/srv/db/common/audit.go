@@ -59,9 +59,6 @@ type audit struct {
 	log logrus.FieldLogger
 }
 
-// NewAuditFn defines a function that creates an audit logger.
-type NewAuditFn func(AuditConfig) (Audit, error)
-
 // NewAudit returns a new instance of the audit events emitter.
 func NewAudit(config AuditConfig) (Audit, error) {
 	if err := config.Check(); err != nil {

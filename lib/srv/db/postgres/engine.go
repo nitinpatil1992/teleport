@@ -273,8 +273,8 @@ func (e *Engine) receiveFromClient(client *pgproto3.Backend, server *pgproto3.Fr
 			//   https://www.postgresql.org/docs/10/protocol-flow.html#PROTOCOL-FLOW-EXT-QUERY
 			sessionCtx.Statements.Save(msg.Name, msg.Query)
 		case *pgproto3.Bind:
-			// Bind message readies an existing prepared statement (created when
-			// Parse message is received), for execution into what Postgres
+			// Bind message readies existing prepared statement (created when
+			// Parse message is received) for execution into what Postgres
 			// calls a "destination portal", optionally binding it with
 			// parameters (for parameterized queries).
 			err := sessionCtx.Statements.Bind(
@@ -406,15 +406,20 @@ func getBindParameters(msg *pgproto3.Bind) (parameters []string) {
 		// According to Bind message documentation, if there are no parameter
 		// format codes, it may mean that either there are no parameters, or
 		// that all parameters use default text format.
-		if len(msg.ParameterFormatCodes) == 0 || msg.ParameterFormatCodes[i] == parameterFormatCodeText {
+		if len(msg.ParameterFormatCodes) == 0 {
+			parameters = append(parameters, string(p))
+			continue
+		}
+		switch msg.ParameterFormatCodes[i] {
+		case parameterFormatCodeText:
 			// Text parameters can just be converted to their string
 			// representation.
 			parameters = append(parameters, string(p))
-		} else if msg.ParameterFormatCodes[i] == parameterFormatCodeBinary {
+		case parameterFormatCodeBinary:
 			// For binary parameters, just put a placeholder to avoid
 			// spamming the audit log with unreadable info.
 			parameters = append(parameters, "<binary>")
-		} else {
+		default:
 			// Should never happen but...
 			logrus.Warnf("Unknown Postgres parameter format code: %#v.", msg)
 			parameters = append(parameters, "<unknown>")
