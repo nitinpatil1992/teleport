@@ -1442,7 +1442,10 @@ func (s *TLSSuite) TestWebSessionWithoutAccessRequest(c *check.C) {
 	_, err = web.GetWebSessionInfo(context.TODO(), user, ws.GetName())
 	c.Assert(err, check.IsNil)
 
-	new, err := web.ExtendWebSession(user, ws.GetName(), "")
+	new, err := web.ExtendWebSession(WebSessionReq{
+		User:          user,
+		PrevSessionID: ws.GetName(),
+	})
 	c.Assert(err, check.IsNil)
 	c.Assert(new, check.NotNil)
 
@@ -1456,7 +1459,10 @@ func (s *TLSSuite) TestWebSessionWithoutAccessRequest(c *check.C) {
 	_, err = web.GetWebSessionInfo(context.TODO(), user, ws.GetName())
 	c.Assert(err, check.NotNil)
 
-	_, err = web.ExtendWebSession(user, ws.GetName(), "")
+	_, err = web.ExtendWebSession(WebSessionReq{
+		User:          user,
+		PrevSessionID: ws.GetName(),
+	})
 	c.Assert(err, check.NotNil)
 }
 
@@ -1503,7 +1509,11 @@ func (s *TLSSuite) TestWebSessionWithApprovedAccessRequest(c *check.C) {
 	err = clt.CreateAccessRequest(context.Background(), accessReq)
 	c.Assert(err, check.IsNil)
 
-	sess, err := web.ExtendWebSession(user, ws.GetName(), accessReq.GetMetadata().Name)
+	sess, err := web.ExtendWebSession(WebSessionReq{
+		User:            user,
+		PrevSessionID:   ws.GetName(),
+		AccessRequestID: accessReq.GetMetadata().Name,
+	})
 	c.Assert(err, check.IsNil)
 
 	sshcert, err := sshutils.ParseCertificate(sess.GetPub())

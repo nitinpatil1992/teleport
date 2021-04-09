@@ -309,6 +309,10 @@ func (a *Server) validateGithubAuthCallback(q url.Values) (*githubAuthResponse, 
 }
 
 func (a *Server) createWebSession(ctx context.Context, req types.NewWebSessionRequest) (services.WebSession, error) {
+	fmt.Println("")
+	fmt.Println("-------------- creating new session, github first session ", req.IsFirstSession)
+	fmt.Println("")
+
 	// It's safe to extract the roles and traits directly from services.User
 	// because this occurs during the user creation process and services.User
 	// is not fetched from the backend.

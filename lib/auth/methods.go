@@ -18,6 +18,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -421,12 +422,14 @@ func (s *Server) emitNoLocalAuthEvent(username string) {
 }
 
 func (s *Server) createUserWebSession(ctx context.Context, user services.User) (services.WebSession, error) {
+	fmt.Println("----------------- createUserWebSession first creation")
 	// It's safe to extract the roles and traits directly from services.User as this method
 	// is only used for local accounts.
 	return s.createWebSession(ctx, types.NewWebSessionRequest{
-		User:   user.GetName(),
-		Roles:  user.GetRoles(),
-		Traits: user.GetTraits(),
+		User:           user.GetName(),
+		Roles:          user.GetRoles(),
+		Traits:         user.GetTraits(),
+		IsFirstSession: true,
 	})
 }
 
